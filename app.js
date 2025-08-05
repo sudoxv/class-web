@@ -1,6 +1,6 @@
 const express = require("express")
 const { MongoClient, ServerApiVersion } = require("mongodb")
-const path = require('path')
+const path = require("path")
 const mongo = {
   uri: "mongodb+srv://lyvua:qMnhHQLBz4zSAMme@databasebot.wisqy4d.mongodb.net/?retryWrites=true&w=majority&appName=DatabaseBot",
   collection: "exma"
@@ -16,9 +16,6 @@ const client = new MongoClient(mongo.uri, {
 async function addData(collectionName, data) {
   try {
     await client.connect()
-    const database = client.db("function addData(collectionName, data) {
-  try {
-    await client.connect()
     const database = client.db("data")
     const collection = database.collection(collectionName)
     const result = await collection.insertOne(data)
@@ -29,10 +26,6 @@ async function addData(collectionName, data) {
 }
 
 async function watchData(collectionName) {
-  try {
-    await client.connect()
-    console.log('Connected to database')
-    const db = client.db("function watchData(collectionName) {
   try {
     await client.connect()
     console.log('Connected to database')
