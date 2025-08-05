@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Upload</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div class="flex flex-col justify-center items-center h-screen p-4 gap-4">
+    <div class="flex flex-col justify-center items-center">
+      <input id="image-input" type="file" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+      <img id="image-preview" src="" alt="Preview Gambar" class="w-48 h-48 object-cover rounded-lg mt-4 hidden">
+    </div>
+    <div class="flex flex-col items-start">
+      <input id="title" class="bg-white p-2 outline-none border border-gray-800 rounded-md" type="title" placeholder="Title...">
+    </div>
+    <div class="flex flex-col items-start">
+      <input id="caption" class="bg-white p-2 outline-none border border-gray-800 rounded-md" type="caption" placeholder="Caption...">
+    </div>
+    <div class="flex flex-col justify-center items-center">
+      <button id="upload" class="bg-blue-400 text-white px-8 py-2 hover:scale-95 transition-transform duration-300 rounded-md">Upload</button>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ungu: 'hsl(305, 77%, 50%)',
+          },
+        },
+      },
+    };
+  </script>
+  <script>
+    const fileInput = document.getElementById('image-input');
+    const button = document.getElementById('upload');
+    const title = document.getElementById('title');
+    const caption = document.getElementById('caption');
+    const imagePreview = document.getElementById('image-preview');
+    let base64string = '';
+    
+    fileInput.addEventListener('change', (e) => {
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = () => {
+        base64string = reader.result;
+        imagePreview.src = base64string;
+        imagePreview.classList.remove('hidden');
+      };
+      
+      reader.readAsDataURL(file);
+    });
+    
+    button.addEventListener('click', () => {
+        if (!fileInput.files[0]) return alert("Gambar tidak boleh kosong!")
+        if (!title.value && !caption.value) return alert("Judul dan Caption tidak boleh kosong!");
+        axios.post('/api/v1/upload', {
+            "data": {
+                "image": base64string,
+                "title": title.value,
+                "caption": caption.value
+            }
+        }).then(_ => {
+            console.log("Berhasil POST content baru");
+            fileInput.files.clear();
+        }).catch(err => {
+            console.error(err);
+        });
+    });
+  </script>
+</body>
+</html>
