@@ -53,7 +53,7 @@ app.get("/", async (req, res) => {
 })
 
 app.get("/upload", (req, res) => {
-  res.sendFile("./views/upload.html")
+  res.sendFile(path.join(__dirname, "views", "upload.html"))
 })
 
 app.post("/api/v1/upload", async (req, res) => {
